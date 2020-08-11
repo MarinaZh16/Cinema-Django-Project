@@ -1,0 +1,46 @@
+{% extends 'movies/base.html' %}
+
+
+{% block title %}Seances{% endblock %}
+{% block content %}
+
+<div class="container">
+     <a class="btn btn-info" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false" style="margin: 4px;">
+         Sort by: {{ choice }}
+            </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="{% url 'seances_sorted' 1 %}">price</a>
+          <a class="dropdown-item" href="{% url 'seances_sorted' 2 %}">beginning</a>
+          <a class="dropdown-item" href="{% url 'all_seances' %}">title</a>
+        </div>
+    <div class="row row-cols-2">
+     {% for seance in seance_list %}
+      <div class="col" id="col1">
+          <table><tr><td>
+              {% if seance.film.image_title %}
+       <p id="picSeances"><img src="{{seance.film.image_title.url}}"  alt="" width="150px">
+        {% else %}
+        Нет картинки
+        {% endif %}
+       </p>
+          </td><td><ul class="list-group" style="list-style: none;"><li>
+          <a class="title" href="{% url 'seance_by_id' seance.id %}"> <h3>{{ seance.film.title }}</h3></a>
+          <h6 class="date">{{ seance.beginning|date:"d / m H:i" }}</h6>
+          <label id="hall"><h7>{{ seance.hall }} hall </h7></label>
+                            <label class="lab1"><h7 class="badge" id="free-seats">{{ seance.seats }} seats</h7>
+                            <h7 class="badge" id="free-seats" style="background-color:#B4A0AC">
+                                {{ seance.price }} UAH</h7></label>
+          {% if user.is_superuser %}
+          {% if seance.is_editable == True %}
+     <a class="btn btn-dark" href="{% url 'edit_seance' seance.id %}">Edit</a>
+          {% endif %}
+     {% endif %}
+          </h5>
+
+          </ul></td></tr></table>
+      </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

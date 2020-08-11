@@ -1,0 +1,40 @@
+{% extends 'movies/base.html' %}
+
+
+{% block title %}{{ ticket_id }}{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h5>Total count {{ user.total_sum }} UAH</h5>
+{% for seance in seance_list %}
+<div class="col" id="col3">
+    <div class="row">
+    <div class="col-3" > {% if seance.film.image %}
+         <p><img src="{{seance.film.image_title.url}}"  alt="" width="150px">
+        {% else %}
+          Нет картинки
+        {% endif %}</p>
+    </div>
+    <div class="col"><a class="title" href="{% url 'seance_by_id' seance.id %}"><h2>{{ seance.film }}</h2></a>
+                <h6 class="date">{{ seance.beginning|date:"d / m H:i" }}</h6>
+    </div>
+    <div class="col-4">
+        <h7>
+        {% for ticket in ticket_list %}
+        {% if seance == ticket.seance %}
+        {% if user == ticket.user or user.is_superuser %}
+          <a class="badge badge-info" href="{% url 'ticket_by_id' ticket.id %}"> {{ ticket.row }}/{{ticket.seat }} </a>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+        </h7>
+    </div>
+        </div>
+    </div>
+        {% endfor %}
+
+
+
+</div>
+    {% endblock %}

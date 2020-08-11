@@ -1,0 +1,16 @@
+{% extends 'movies/base.html' %}
+
+
+{% block title %}Films{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row row-cols-2">
+     {% for hall in hall_list %}
+      <div class="col">
+          <a class="title" href="{% url 'hall_by_id' hall.id %}"> <h3 class="title">{{ hall.name }} Hall</h3></a>
+      </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

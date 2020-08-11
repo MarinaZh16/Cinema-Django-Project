@@ -1,0 +1,136 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+        .hr {
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'movies/style/style1.css' %}">
+    <title>Cinema | {% block title %}HOME{% endblock %}</title>
+</head>
+<body style="margin-top: 80px; margin-bottom: 80px">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    {# <a class="navbar-brand" href='#'><div class="navbar-toggler-icon"></div></a> #}
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" >
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" >
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+            <a class="btn btn-outline-info" href="#" onclick="history.back();"><</a>
+            </li>
+            {% if user.is_superuser %}
+            <li class="nav-item active">
+                <a class="btn btn-outline-info my-2 my-sm-0" href="{% url 'all_tickets' %}">Tickets<span class="sr-only">(current)</span></a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="btn btn-outline-info my-2 my-sm-0" href="{% url 'seances_today' %}">Seances</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="btn btn-outline-info" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+          All
+            </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="{% url 'all_films' %}">Films</a>
+          <a class="dropdown-item" href="{% url 'all_halls' %}">Halls</a>
+          <a class="dropdown-item" href="{% url 'all_seances' %}">Seances</a>
+        </div>
+            </li>
+<!--             <li class="nav-item">-->
+<!--                <a class="btn btn-outline-info my-2 my-sm-0" href="{% url 'all_halls' %}">Halls</a>-->
+<!--            </li>-->
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="btn btn-outline-info my-2 my-sm-0" href="{% url 'profile' %}">Profile</a>
+            </li>
+            {% if not user.is_superuser %}
+            <li class="nav-item">
+                <a class="btn btn-outline-info my-2 my-sm-0"  href="{% url 'all_tickets' %}">My tickets</a>
+            </li>
+            {% endif %}
+            {% endif %}
+            {% if user.is_superuser %}
+            <li class="nav-item">
+                <a class="btn btn-outline-info my-2 my-sm-0"  href="http://127.0.0.1:8000/admin/" tabindex="-1">Admin Site</a>
+            </li>
+            <li class="nav-item dropdown">
+            <a class="btn btn-outline-info" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          New Add
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="{% url 'add_film' %}">Film</a>
+          <a class="dropdown-item" href="{% url 'add_hall' %}">Hall</a>
+          <a class="dropdown-item" href="{% url 'add_seance' %}">Seance</a>
+        </div>
+            </li>
+            {% endif %}
+        </ul>
+
+<!--        {# <form class="form-inline my-2 my-lg-0" action="">-->
+<!--            <input class="form-control mr-sm-2"-->
+<!--                   type="search"-->
+<!--                   name="search"-->
+<!--                   value=""-->
+<!--                   placeholder="Search"-->
+<!--                   aria-label="Search">-->
+<!--            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>-->
+<!--        </form> #}-->
+        {% if user.is_authenticated %}
+            <ul class="navbar-nav mr-5">
+                <li class="nav-item dropdown">
+                    <a class="btn btn-outline-info" href="#" id="navbarDropdown1" role="button"
+                       data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        {{ user.username }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        {% else %}
+            <a class="btn btn-outline-info" href="{% url 'login' %}">Login</a>
+            <a class="btn btn-outline-info" href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </div>
+</nav>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+
+             <li class="badge badge-warning">{{ message }}</li>
+
+        {% endfor %}
+    </ul>
+{% endif %}
+{% block content %}
+{% endblock %}
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+{% block extrajs %}
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% extends 'movies/base.html' %}
+
+{% block title %}Film{% endblock %}
+
+{% block content %}
+<div class="container">
+     {% for film in film_list %}
+      <div class="col" id="col-film">
+          <table><tr><td>
+               {% if film.image_title %}
+              <p id="picSeances"><img src="{{ film.image_title.url }}"  alt="" width="150px">
+        {% else %}
+        Нет картинки
+        {% endif %}</p>
+          </td><td><ul style="list-style: none; margin-top: 0px;" class="list-group"><li>
+          <a class="title" href="{% url 'film_by_id' film.id %}"><h2 class="title">{{ film.title }}</h2></a>
+              <h6>З {{ film.start_show|date:"d / m" }} у кiно</h6>
+          </li>
+              <li><h7 id="film">{{ film.description | truncatechars:200 }}</h7></li>
+          </ul>
+          </td></tr></table>
+      </div>
+          {% endfor %}
+</div>
+{% endblock %}

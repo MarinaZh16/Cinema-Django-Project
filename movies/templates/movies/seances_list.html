@@ -1,0 +1,60 @@
+{% extends 'movies/base.html' %}
+
+
+{% block title %}Films{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a class="btn btn-info" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false" style="margin: 4px;">
+       {{ choice }} :
+            </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="{% url 'seances_tomorrow' 1 %}">tomorrow</a>
+          <a class="dropdown-item" href="{% url 'seances_today' %}">today</a>
+        </div>
+    {% if not film_list %}
+    <h1>Увы...</h1>
+    {% endif %}
+    <div id="col0" class="row row-cols-2">
+     {% for film in film_list %}
+      <div class="col" id="col1">
+          <table><tr><td>
+                      {% if film.image_title %}
+       <p><img  src="{{film.image_title.url}}"  alt="" width="150px">
+        {% else %}
+        Нет картинки
+        {% endif %}
+       </p>
+          </td><td><ul style="list-style: none; margin-top: 0px;" class="list-group"><li>
+          <a class="title" href="{% url 'film_by_id' film.id %}"><h3>{{ film.title }}</h3></a>
+          <h6>{{ view_date|date:"d / m" }}</h6>
+          </li>
+          {% for seance in seances %}
+                {% if seance.film == film %}
+          <li>
+                    {% if  today|date:"H:i" > seance.beginning|date:"H:i" %}
+                    {% if not delta %}
+                        <a id="dis" class="btn btn-outline-info disabled" role="button" aria-disabled="true" style="margin: 2px">
+                    {% else %}
+                        <a id="abl" class="btn btn-info" style="margin: 2px" href="{% url 'seance_by_id' seance.id %}">
+                    {% endif %}
+                    {% else %}
+                        <a id="abl1" class="btn btn-info" style="margin: 2px" href="{% url 'seance_by_id' seance.id %}">
+                    {% endif %}
+                    {{ seance.beginning|date:"H:i" }}
+                        </a>
+                        <label id="hall"><h7>{{ seance.hall }} hall </h7></label>
+                            <label class="lab1"><h7 class="badge" id="free-seats">{{ seance.seats }} seats</h7>
+                            <h7 class="badge" id="free-seats" style="background-color:#B4A0AC">
+                                {{ seance.price }} UAH</h7></label>
+          </li>
+                    {% endif %}
+                    {% endfor %}
+          </ul></td></tr>
+          </table>
+      </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

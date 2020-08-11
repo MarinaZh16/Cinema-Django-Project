@@ -1,0 +1,14 @@
+{% extends 'movies/base.html' %}
+
+
+{% block title %}New hall{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form style="color: #415771;" action="" method="post" enctype='multipart/form-data'>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-info">Save</button>
+        </form>
+    </div>
+{% endblock %}

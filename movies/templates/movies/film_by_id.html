@@ -1,0 +1,22 @@
+{% extends 'movies/base.html' %}
+
+
+{% block title %}{{ film_id }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="title">{{ film.title }}</h1>
+    <div class="row">
+        <div class="col-8"><h4>{{ film.start_show|date:"d / m" }} - {{ film.end_show|date:"d / m" }}</h4></div>
+        <div class="col-4"><h4>Duration: {{ film.duration }}</h4></div>
+  </div>
+
+    <div><h7>{{ film.description }}</h7></div>
+
+     <p id="picSeances">{% if film.image %}
+          <img src="{{film.image.url}}"  alt="" width="100%">
+        {% else %}
+          Нет картинки
+        {% endif %}</p>
+</div>
+{% endblock %}

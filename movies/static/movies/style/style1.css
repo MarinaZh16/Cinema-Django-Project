@@ -1,0 +1,252 @@
+.navbar.navbar-expand-lg.navbar-dark.fixed-top {
+background: #415771;
+}
+
+#seat-wrap {
+background-color: #B4A0AC;
+width: 20px;
+}
+
+.lab {
+cursor: pointer;
+opacity: 0;
+margin:0; width:20x;
+}
+
+/* .lab:hover {
+opacity:1;
+color: #40698E;
+} */
+
+
+#seat-wrap:hover {
+border: 1.5px solid #40698E;
+}
+
+/*  */
+
+input[disabled] ~ #seat-wrap {
+background-color: #6DB2C8;
+color: #6DB2C8;
+}
+
+/*  */
+input[type=checkbox]:checked ~ #seat-wrap {
+background-color:#40698E;
+}
+/*  */
+
+
+div.hall {
+margin-top: 250px;
+position: relative;
+}
+
+div.hall p{
+position: absolute;
+margin-top: -20%;
+left: 50%;
+margin-right: -50%;
+transform: translate(-50%, -50%)
+}
+
+div.hall p.screen{
+position: absolute;
+margin-top: -15%;
+left: 50%;
+margin-bottom: 50%;
+margin-right: -50%;
+transform: translate(-50%, -50%)
+}
+
+div.hall div.seats table{
+position: absolute;
+top: 50%;
+left: 50%;
+margin-top: 10%;
+margin-right: -50%;
+transform: translate(-50%, -50%)
+}
+
+/*  */
+#nav1 {
+background: #415771;
+}
+/********************************'seances_list'*************************************/
+/*  */
+#col0 {
+margin-right: 20px;
+}
+
+/* подложка для сеансов */
+div#col1 {
+position: relative;
+ padding: 5px; border:
+ margin: 10px;
+ border: 1px solid #6DB2C8;
+ border-radius: 10px;
+ height: 300px;
+ background-color: rgb(220, 220, 220, .5);
+}
+
+
+div#col1.my1 {
+border: 0;
+background-color: rgb(220, 220, 220, .5);
+}
+
+
+div#col3 {
+border: 1px solid #415771;
+border-radius: 10px;
+border: margin: 10px;
+opacity: .5;
+background-color: rgb(220, 220, 220, .5);
+}
+div#col3:hover {
+opacity:1;
+}
+
+h2, h3, h6{
+color: #6DB2C8;
+}
+
+h1, h4, h5, h7{
+color: #415771;
+}
+
+div#col-film.col {
+
+border-radius: 10px;
+margin: 10px;
+background-color: rgb(220, 220, 220, .5);
+
+}
+h6#film {
+width:90%;
+color: #415771;
+}
+
+.btn.btn-outline-info {
+color: #6DB2C8;
+border: 1px solid #6DB2C8;
+}
+.btn.btn-outline-info:hover {
+color: white;
+}
+.badge.badge-info {
+background-color: #6DB2C8
+}
+
+.btn.btn-info {
+background-color: #6DB2C8;
+border: 1px solid #6DB2C8;
+}
+.btn.btn-info:hover {
+background-color: white;
+border: 1px solid #6DB2C8;
+color: #6DB2C8;
+}
+.dropdown-item {
+color: #6DB2C8;
+}
+
+.dropdown-item:hover {
+background-color: #6DB2C8;
+color: white;
+}
+
+/*  */
+p#picSeances {
+
+
+}
+img {
+margin: 4px;
+border-radius: 5px;
+border: 2px solid #415771;
+}
+/*  */
+#col2 {
+position: relative;
+padding: 0px; border:
+ margin: 20px;
+ border: 1px solid #86C8CD;
+ border-radius: 1.5%;
+ height: 300px;
+
+}
+/* кнопка выбора даты сеанса */
+a#pick1, a#pick2 {
+width: 80px;
+margin: 4px;
+padding-left: 5px;
+}
+
+/* название фильма */
+.title {
+color: #6DB2C8;
+}
+
+.title-dark {f
+color: #415771;
+}
+
+
+a.title:hover {
+color: #6DB2C8;
+
+/* дата сеанса */
+p.date {
+color: #415771;
+}
+
+/*  */
+#title1 {
+margin-left: 50%;
+}
+
+/*  */
+ul.list-group {
+list-style: none;
+position: absolute;
+right: 50;
+top: 0;
+
+}
+
+li {
+margin-top: 0px;
+background-color: red;
+}
+
+
+/*  */
+
+span#free-seats {
+width: 30px;
+background-color: #B4A0AC;
+color: white;
+border-radius: 5px;
+padding: 1%;
+
+}
+
+.lab1 {
+color: #415771;
+}
+
+/*  */
+#hall {
+width: 90px;
+color: #B4A0AC;
+border-radius: 5px;
+padding: 1%;
+margin-left: 0px;
+}
+
+div#profile.container.profile {
+color: #415771;
+}
+
+

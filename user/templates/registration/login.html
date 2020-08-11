@@ -1,0 +1,11 @@
+{% extends 'movies/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-info my-2 my-sm-0">Login</button>
+    </form>
+{% endblock %}

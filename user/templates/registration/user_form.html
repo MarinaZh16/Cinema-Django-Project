@@ -1,0 +1,14 @@
+{% extends 'movies/base.html' %}
+
+
+{% block title %}REGISTER{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="submit">Save</button>
+        </form>
+    </div>
+{% endblock %}

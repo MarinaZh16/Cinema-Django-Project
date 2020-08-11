@@ -1,0 +1,59 @@
+{% extends 'movies/base.html' %}
+{% block title %}{{ seance_id }}{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div id="col1" class="my1">
+        <table><tr><td>
+        {% if seance.film.image %}
+          <p><img src="{{seance.film.image.url}}"  alt="" width="450px" height="260 px">
+        {% else %}
+          Нет картинки
+              {% endif %}</p>
+        </td>
+            <td><ul class="list-group" style="list-style: none"><li>
+         <a class="title" href="{% url 'film_by_id' seance.film.id %}" ><h2>{{ seance.film.title }}</h2></a>
+                <h6 class="date">{{ seance.beginning|date:"d / m H:i" }}</h6>
+                <label id="hall"><h5>{{ seance.hall }}</h5></label>
+                <label class="lab1"><h7><span class="badge" id="free_seats" >{{ seance.seats }}</span>seats left</h7></label></li>
+                <li>
+                    <label class="lab1"><h7>Price<span class="badge">{{ seance.price }}</span> UAH</h7></label></li>
+                </li>
+
+            </ul></td></tr></table>
+    </div>
+    <form action="" class="hall-form" method="post">
+         <input type="hidden" name="seance_id" value="{{seance.id}}">
+        {% csrf_token %}
+        <div class="hall">
+     <p class="screen"><img style="border: 0px" src="/media/media/film_images/screen.svg"  alt=""></p>
+    <div class="seats">
+        <table>
+        {% for row in seance.row_list %}
+              <tr>
+
+                {% for seat in seance.seat_list %}
+                   <td>
+                            <input type="checkbox" style="position: absolute; opacity: 0;" id="seat-{{ row }}-{{ seat }}"
+                                   name="seat-{{ row }}-{{ seat }}"
+                              {% for ticket in tickets %}
+                              {% if ticket.row == row and ticket.seat == seat %}
+                              disabled=""
+                              {% endif %}
+                              {% endfor %} />
+                        <span id="seat-wrap" class="badge badge-info">
+                              <label id="lab" class="lab" for="seat-{{ row }}-{{ seat }}">{{ seat }}</label>
+                        </span>
+                    </td>
+                {% endfor %}
+              </tr>
+        {% endfor %}
+        </table></div></div>
+
+        {% if user.is_authenticated %}
+        <button class="btn btn-info">Byu</button>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}

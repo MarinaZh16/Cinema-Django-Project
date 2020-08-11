@@ -1,0 +1,18 @@
+{% extends 'movies/base.html' %}
+
+
+{% block title %}{{ ticket_id }}{% endblock %}
+
+{% block content %}
+<div class="container">
+     <h1 class="title">{{ ticket.seance.film }}</h1>
+     <div>{{ ticket.seance.film.description }}</div>
+     <div>{{ ticket.seance.price }}</div>
+     <span class="title">Row: {{ ticket.seat }} / Seat: {{ ticket.row }}</span>
+      <p>{% if ticket.seance.film.image %}
+          <img src="{{ticket.seance.film.image.url}}"  alt="" width="100%">
+        {% else %}
+          Нет картинки
+        {% endif %}</p>
+</div>
+{% endblock %}

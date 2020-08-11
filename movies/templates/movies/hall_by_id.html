@@ -1,0 +1,30 @@
+{% extends 'movies/base.html' %}
+
+
+{% block title %}{{ hall_id }}{% endblock %}
+
+{% block content %}
+<div class="container">
+     <h1 class="title">{{ hall.name }}</h1>
+     <div>Rows: {{ hall.row }}</div>
+     <div>Seats in row: {{ hall.seat }}</div>
+     <div>Total {{ hall.total_seats }}</div>
+</div>
+<div class="hall">
+     <p><img style="border: 0px;" src="/media/media/film_images/screen.svg"  alt=""></p>
+    <div class="seats">
+    <table style="margin-bottom:10%;">
+        {% for row in rows %}
+              <tr>
+                {% for seat in seats %}
+                   <td>
+                        <span style="color:#B4A0AC" id="seat-wrap" class="badge badge-info">{{ seat }}
+                        </span>
+                    </td>
+                {% endfor %}
+              </tr>
+        {% endfor %}
+         </table>
+    </div>
+</div>
+{% endblock %}

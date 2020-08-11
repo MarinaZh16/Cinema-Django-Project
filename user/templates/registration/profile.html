@@ -1,0 +1,33 @@
+{% extends 'movies/base.html' %}
+
+{% block title %} My info {% endblock %}
+
+{% block content %}
+<div id="profile" class="container profile">
+
+ <table>
+     <tr>
+         <td><h1>Hello, {{ user.username }}!</h1></td>
+     </tr>
+      {% if not user.is_superuser %}
+     <tr>
+         <td><h2></h2></td>
+     </tr>
+      {% endif %}
+     <tr>
+         <td><h1>Your Email: </h1><h7>{{ user.email }}</h7></td>
+     </tr>
+ </table>
+    {% if confirm_form %}
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="confirm">
+            <p>Confirm your email</p>
+            {{ confirm_form }}
+            <button>Confirm</button>
+        </form>
+    {% endif %}
+
+</div>
+
+{% endblock %}
