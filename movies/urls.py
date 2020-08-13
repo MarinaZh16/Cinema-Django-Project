@@ -17,4 +17,6 @@ urlpatterns = [
     path('seance/<int:pk>/', views.SeanceDetailView.as_view(), name='seance_by_id'),
     path('ticket/', views.TicketListView.as_view(), name='all_tickets'),
     path('ticket/<int:pk>/', views.TicketDetailView.as_view(), name='ticket_by_id'),
+    path('json_tickets/<int:pk>/', views.TicketsAPIView.as_view(), name='user_tickets_detail'),
+
 ]

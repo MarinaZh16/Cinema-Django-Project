@@ -10,7 +10,7 @@ from django.contrib import messages
 
 class FilmForm(ModelForm):
     start_show = forms.DateTimeField(widget=DatePicker)
-    end_show = forms.DateTimeField(widget=DatePicker)
+    # end_show = forms.DateTimeField(widget=DatePicker)
     film_duration = forms.CharField(help_text='minutes')
 
     class Meta:

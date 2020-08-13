@@ -18,7 +18,6 @@ class Film(models.Model):
     description = models.TextField(blank=True, null=True)
     film_duration = models.DurationField(blank=True, verbose_name='Duration')
     start_show = models.DateField(null=True)
-    end_show = models.DateField(null=True)
     is_deleted = models.BooleanField(default=True, db_index=True)
     image = models.ImageField(blank=True, null=True, upload_to='media/film_images/')
     image_title = models.ImageField(blank=True, null=True, upload_to='media/film_images/')
@@ -27,6 +26,11 @@ class Film(models.Model):
     def duration(self):
         duration = self.film_duration * 60
         return duration
+
+    @property
+    def end_show(self):
+        end_show = self.start_show + timedelta(days=14)
+        return end_show
 
     def __str__(self):
         return f"{self.title}"
@@ -37,7 +41,6 @@ class Film(models.Model):
     def delete(self, using=None):
         self.is_deleted = True
         self.save()
-
 
 
 class Hall(TimestampModel):
@@ -85,6 +88,10 @@ class Seance(TimestampModel):
 
     def save(self, *args, **kwargs):
         self.end = self.beginning + self.film.duration
+        if self.seats == 0 and self.created_at == None:
+            self.seats = self.hall.total_seats
+        # elif self.is_editable == True:
+
         super(Seance, self).save(*args, **kwargs)
 
     def delete(self, using=None):
@@ -110,7 +117,4 @@ class Ticket(TimestampModel):
     def __str__(self):
         return f"{self.seance.film} {self.seance.beginning}"
 
-    # def delete(self, using=None):
-    #     self.is_deleted = True
-    #     self.save()
 

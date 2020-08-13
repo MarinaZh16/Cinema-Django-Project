@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from movies import models, forms
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, TemplateView
-from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.utils import timezone
@@ -9,10 +8,21 @@ from datetime import timedelta, date, datetime
 from django.contrib import messages
 from movies.api.serializers import FilmSerializer, SeanceSerializer, TicketSerializer
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.http import Http404
-from rest_framework import status
+from movies.api.permissions import AuthorOnlyPermission
+
+
+# class ProtectedTemplateView(UserPassesTestMixin, TemplateView):
+#     def test_func(self):
+#         return self.request.user.is_superuser
+#
+#     def dispatch(self, request, *args, **kwargs):
+#         user_test_result = self.get_test_func()()
+#         if not user_test_result:
+#             return redirect('/')
+#         return super().dispatch(request, *args, **kwargs)
 
 
 def index(request):
@@ -106,7 +116,6 @@ class SeanceCreate(CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.seats = self.object.hall.total_seats
         self.object.save()
         return super().form_valid(form)
 
@@ -204,18 +213,39 @@ class TicketDetailView(DetailView):
 
 """------------------------------------------------------------------------------------------------------------------"""
 
+
 class FilmViewSet(ModelViewSet):
     queryset = models.Film.objects.all()
     serializer_class = FilmSerializer
+    permission_classes = [IsAuthenticated, AuthorOnlyPermission]
 
 
 class SeanceViewSet(ModelViewSet):
     queryset = models.Seance.objects.all()
     serializer_class = SeanceSerializer
+    permission_classes = [IsAdminUser, ]
 
 
 class TicketViewSet(ModelViewSet):
     queryset = models.Ticket.objects.all()
     serializer_class = TicketSerializer
+    permission_classes = [AuthorOnlyPermission]
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        user.save()
+        return serializer.save(user=user)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 
+class TicketsAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        if kwargs.get('pk'):
+            ticket = models.Ticket.objects.get(id=kwargs.get('pk'))
+            data = TicketSerializer(ticket).data
+        else:
+            tickets = models.Ticket.objects.filter(user=request.user)
+            data = TicketSerializer(tickets, many=True).data
+        return Response(data, status=200)

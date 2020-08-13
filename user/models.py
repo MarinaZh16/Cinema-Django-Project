@@ -4,6 +4,11 @@ from datetime import datetime
 import uuid as uuid
 
 
+
+
+
+
+
 class User(AbstractUser):
     last_echo = models.DateTimeField(auto_now=True)
     token = models.CharField(max_length=32, blank=True, null=True)

@@ -5,8 +5,16 @@ from user.models import User
 from django.views.generic.edit import FormView, UpdateView
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy, reverse
-from movies.api.serializers import UserSerializer
+from movies.api.serializers import UserSerializer, CreateUserSerializer
 from rest_framework.viewsets import ModelViewSet
+from django.http import HttpResponseRedirect, HttpResponse
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAdminUser
+
+
 
 
 class RegisterView(FormView):
@@ -38,3 +46,19 @@ class ProfilePage(TemplateView):
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [IsAdminUser]
+
+
+
+class ObtainTokenView(APIView):
+    http_method_names = ['post']
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        user = authenticate(request,
+                            username=self.request.data.get('username'),
+                            password=self.request.data.get('password'))
+        if user is not None:
+            return Response(str(Token.objects.get(user=user)), 200)
+        else:
+            return HttpResponse(status=401)

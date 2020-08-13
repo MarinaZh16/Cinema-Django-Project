@@ -18,24 +18,27 @@ from django.urls import path, include, reverse, reverse_lazy
 from django.conf import settings
 from django.conf.urls.static import static
 from movies import views
-from user import views as _views
 from rest_framework import routers
+# from user import views as _views
+from user.views import UserViewSet, ObtainTokenView
 
 router = routers.DefaultRouter()
 router.register(r'tickets', views.TicketViewSet)
 router.register(r'films', views.FilmViewSet)
 router.register(r'seances', views.SeanceViewSet)
-router.register(r'user', _views.UserViewSet)
+router.register(r'user', UserViewSet)
 
 urlpatterns = [
     path('', views.index, name='homepage'),
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('obtain_token/', ObtainTokenView.as_view()),
     path('movies/', include('movies.urls')),
     path('user/', include('user.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
 
 
