@@ -18,5 +18,10 @@ urlpatterns = [
     path('ticket/', views.TicketListView.as_view(), name='all_tickets'),
     path('ticket/<int:pk>/', views.TicketDetailView.as_view(), name='ticket_by_id'),
     path('json_tickets/<int:pk>/', views.TicketsAPIView.as_view(), name='user_tickets_detail'),
-
+    path('api_films/', views.film_list, name='films_list'),
+    path('api_films/<int:pk>/', views.film_list, name='films_derail'),
+    path('api_seances/', views.seance_list, name='seances_list'),
+    path('api_seances/<int:pk>/', views.seance_list, name='seances_derail'),
+    path('api_halls/', views.hall_list, name='halls_list'),
+    path('api_halls/<int:pk>/', views.hall_list, name='halls_derail'),
 ]

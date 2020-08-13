@@ -5,7 +5,7 @@ from user.models import User
 from django.views.generic.edit import FormView, UpdateView
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy, reverse
-from movies.api.serializers import UserSerializer, CreateUserSerializer
+from movies.api.serializers import UserSerializer
 from rest_framework.viewsets import ModelViewSet
 from django.http import HttpResponseRedirect, HttpResponse
 from rest_framework.authtoken.models import Token

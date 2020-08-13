@@ -23,10 +23,12 @@ from rest_framework import routers
 from user.views import UserViewSet, ObtainTokenView
 
 router = routers.DefaultRouter()
-router.register(r'tickets', views.TicketViewSet)
 router.register(r'films', views.FilmViewSet)
+router.register(r'halls', views.HallVieSet)
 router.register(r'seances', views.SeanceViewSet)
+router.register(r'tickets', views.TicketViewSet)
 router.register(r'user', UserViewSet)
+
 
 urlpatterns = [
     path('', views.index, name='homepage'),

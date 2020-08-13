@@ -5,8 +5,14 @@ import datetime
 from django.utils import timezone
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    ticket_set = serializers.HyperlinkedRelatedField(many=True, view_name='user_tickets_detail', read_only=True)
+class CinemaSerializer(serializers.HyperlinkedModelSerializer):
+    pass
+
+
+class UserSerializer(serializers.ModelSerializer):
+    ticket_set = serializers.HyperlinkedRelatedField(
+        many=True, view_name='user_tickets_detail', read_only=True
+    )
 
     class Meta:
         model = User
@@ -14,30 +20,37 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields = ['username', 'email']
 
 
-class CreateUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('email', 'username', 'password')
-        extra_kwargs = {'password': {'write_only': True}}
+# class CreateUserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ('email', 'username', 'password')
+#         extra_kwargs = {'password': {'write_only': True}}
+#
+#     def create(self, validated_data):
+#         user = User(
+#             email=validated_data['email'],
+#             username=validated_data['username']
+#         )
+#         user.set_password(validated_data['password'])
+#         user.save()
+#         return user
 
-    def create(self, validated_data):
-        user = User(
-            email=validated_data['email'],
-            username=validated_data['username']
-        )
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+class HallSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Hall
+        fields = '__all__'
 
 
 class FilmSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Film
         exclude = ['is_deleted']
 
 
 class SeanceSerializer(serializers.ModelSerializer):
-    beginning = serializers.DateTimeField()
+
 
     class Meta:
         model = models.Seance

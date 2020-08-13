@@ -6,11 +6,13 @@ from django.http import HttpResponseRedirect
 from django.utils import timezone
 from datetime import timedelta, date, datetime
 from django.contrib import messages
-from movies.api.serializers import FilmSerializer, SeanceSerializer, TicketSerializer
+from movies.api.serializers import FilmSerializer, SeanceSerializer, TicketSerializer, HallSerializer
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
 from movies.api.permissions import AuthorOnlyPermission
 
 
@@ -217,19 +219,41 @@ class TicketDetailView(DetailView):
 class FilmViewSet(ModelViewSet):
     queryset = models.Film.objects.all()
     serializer_class = FilmSerializer
-    permission_classes = [IsAuthenticated, AuthorOnlyPermission]
+    permission_classes = [IsAdminUser]
+
+
+class HallVieSet(ModelViewSet):
+    queryset = models.Hall.objects.all()
+    serializer_class = HallSerializer
+    permission_classes = [IsAdminUser]
 
 
 class SeanceViewSet(ModelViewSet):
     queryset = models.Seance.objects.all()
     serializer_class = SeanceSerializer
-    permission_classes = [IsAdminUser, ]
+    permission_classes = [IsAdminUser]
 
 
 class TicketViewSet(ModelViewSet):
     queryset = models.Ticket.objects.all()
     serializer_class = TicketSerializer
-    permission_classes = [AuthorOnlyPermission]
+    permission_classes = [IsAdminUser]
+
+
+"""------------------------------------------------------------------------------------------------------------------"""
+
+
+class TicketsAPIView(APIView):
+    serializer_class = TicketSerializer
+
+    def get(self, request, *args, **kwargs):
+        if kwargs.get('pk'):
+            ticket = models.Ticket.objects.get(id=kwargs.get('pk'))
+            data = TicketSerializer(ticket).data
+        else:
+            tickets = models.Ticket.objects.filter(user=request.user)
+            data = TicketSerializer(tickets, many=True).data
+        return Response(data, status=200)
 
     def perform_create(self, serializer):
         user = self.request.user
@@ -240,12 +264,37 @@ class TicketViewSet(ModelViewSet):
         return self.create(request, *args, **kwargs)
 
 
-class TicketsAPIView(APIView):
-    def get(self, request, *args, **kwargs):
+@api_view(['GET'])
+def film_list(request, *args, **kwargs):
+    if request.method == 'GET':
         if kwargs.get('pk'):
-            ticket = models.Ticket.objects.get(id=kwargs.get('pk'))
-            data = TicketSerializer(ticket).data
+            film = models.Film.objects.get(id=kwargs.get('pk'))
+            data = FilmSerializer(film).data
         else:
-            tickets = models.Ticket.objects.filter(user=request.user)
-            data = TicketSerializer(tickets, many=True).data
+            films = models.Film.objects.all()
+            data = FilmSerializer(films, many=True).data
+        return Response(data, status=200)
+
+
+@api_view(['GET'])
+def seance_list(request, *args, **kwargs):
+    if request.method == 'GET':
+        if kwargs.get('pk'):
+            seance = models.Seance.objects.get(id=kwargs.get('pk'))
+            data = SeanceSerializer(seance).data
+        else:
+            seances = models.Seance.objects.all()
+            data = SeanceSerializer(seances, many=True).data
+        return Response(data, status=200)
+
+
+@api_view(['GET'])
+def hall_list(request, *args, **kwargs):
+    if request.method == 'GET':
+        if kwargs.get('pk'):
+            hall = models.Hall.objects.get(id=kwargs.get('pk'))
+            data = HallSerializer(hall).data
+        else:
+            halls = models.Hall.objects.all()
+            data = HallSerializer(halls, many=True).data
         return Response(data, status=200)
