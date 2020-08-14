@@ -164,8 +164,8 @@ class SeanceDetailView(DetailView):
                     else:
                         ticket = models.Ticket(user=user, seance=seance, row=row, seat=seat)
                         ticket.save()
-                        user.total_sum += ticket.seance.price
-                        user.save()
+                        # user.total_sum += ticket.seance.price
+                        # user.save()
                         seance.seats -= 1
                         seance.save()
         # return HttpResponseRedirect(reverse_lazy('all_tickets'))

@@ -15,8 +15,6 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser
 
 
-
-
 class RegisterView(FormView):
     model = User
     form_class = UserForm
@@ -47,7 +45,6 @@ class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser]
-
 
 
 class ObtainTokenView(APIView):

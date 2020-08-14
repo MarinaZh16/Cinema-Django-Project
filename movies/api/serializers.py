@@ -104,4 +104,5 @@ class TicketSerializer(serializers.ModelSerializer):
                                                   % (seance.hall.row, seance.hall.seat))
             else:
                 seance.seats -= 1
+                seance.save()
                 return data
