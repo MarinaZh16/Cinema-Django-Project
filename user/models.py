@@ -6,8 +6,6 @@ from movies.models import Ticket
 
 class User(AbstractUser):
     last_echo = models.DateTimeField(auto_now=True)
-    # token = models.CharField(max_length=32, blank=True, null=True)
-    # total_sum = models.FloatField(default=0, blank=True, null=True)
 
     @property
     def total_sum(self):
@@ -16,7 +14,6 @@ class User(AbstractUser):
         for ticket in tickets:
             total_sum += ticket.seance.price
         return total_sum
-
 
     def save(self, *args, **kwargs):
         # if not self.token:

@@ -5,10 +5,6 @@ import datetime
 from django.utils import timezone
 
 
-class CinemaSerializer(serializers.HyperlinkedModelSerializer):
-    pass
-
-
 class UserSerializer(serializers.ModelSerializer):
     ticket_set = serializers.HyperlinkedRelatedField(
         many=True, view_name='user_tickets_detail', read_only=True
@@ -20,22 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ['username', 'email']
 
 
-# class CreateUserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ('email', 'username', 'password')
-#         extra_kwargs = {'password': {'write_only': True}}
-#
-#     def create(self, validated_data):
-#         user = User(
-#             email=validated_data['email'],
-#             username=validated_data['username']
-#         )
-#         user.set_password(validated_data['password'])
-#         user.save()
-#         return user
-
-class HallSerializer(serializers.ModelSerializer):
+class HallSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = models.Hall
@@ -51,10 +32,11 @@ class FilmSerializer(serializers.ModelSerializer):
 
 class SeanceSerializer(serializers.ModelSerializer):
 
-
     class Meta:
         model = models.Seance
-        fields = ('film', 'hall', 'beginning', 'price')
+        fields = ('url', 'film', 'hall', 'price', 'beginning', 'is_editable')
+        read_only_fields = ['is_editable']
+
 
     def validate(self, data):
         beginning = data['beginning']

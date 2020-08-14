@@ -71,7 +71,6 @@ class Seance(TimestampModel):
     end = models.DateTimeField(default=timezone.now)
     price = models.FloatField(default=0)
     seats = models.IntegerField(default=0)
-    sold_out = models.BooleanField(default=False, db_index=True)
     is_editable = models.BooleanField(default=True)
 
     @property

@@ -11,27 +11,29 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
+from django.contrib.auth.mixins import UserPassesTestMixin
 from rest_framework import status
 from movies.api.permissions import AuthorOnlyPermission
+from django_filters.rest_framework import DjangoFilterBackend
 
 
-# class ProtectedTemplateView(UserPassesTestMixin, TemplateView):
-#     def test_func(self):
-#         return self.request.user.is_superuser
-#
-#     def dispatch(self, request, *args, **kwargs):
-#         user_test_result = self.get_test_func()()
-#         if not user_test_result:
-#             return redirect('/')
-#         return super().dispatch(request, *args, **kwargs)
+class ProtectedTemplateView(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def dispatch(self, request, *args, **kwargs):
+        user_test_result = self.get_test_func()()
+        if not user_test_result:
+            return redirect('/')
+        return super().dispatch(request, *args, **kwargs)
 
 
 def index(request):
     return render(request, 'movies/homepage.html')
 
 
-class FilmCreate(CreateView):
+class FilmCreate(ProtectedTemplateView, CreateView):
     model = models.Film
     form_class = forms.FilmForm
     success_url = reverse_lazy('all_films')
@@ -86,7 +88,7 @@ class SeancesTodayListView(ListView):
         return context
 
 
-class HallCreate(CreateView):
+class HallCreate(ProtectedTemplateView, CreateView):
     model = models.Hall
     form_class = forms.HallForm
     success_url = reverse_lazy('all_halls')
@@ -111,7 +113,7 @@ class HallDetailView(DetailView):
         return context
 
 
-class SeanceCreate(CreateView):
+class SeanceCreate(ProtectedTemplateView, CreateView):
     model = models.Seance
     form_class = forms.SeanceForm
     success_url = reverse_lazy('all_seances')
@@ -122,8 +124,9 @@ class SeanceCreate(CreateView):
         return super().form_valid(form)
 
 
-class SeanceUpdate(UpdateView):
-    model = models.Seance
+class SeanceUpdate(ProtectedTemplateView, UpdateView):
+    # model = models.Seance
+    queryset = models.Seance.objects.filter(is_editable=True)
     form_class = forms.SeanceForm
     success_url = reverse_lazy('all_seances')
 
@@ -164,8 +167,6 @@ class SeanceDetailView(DetailView):
                     else:
                         ticket = models.Ticket(user=user, seance=seance, row=row, seat=seat)
                         ticket.save()
-                        # user.total_sum += ticket.seance.price
-                        # user.save()
                         seance.seats -= 1
                         seance.save()
         # return HttpResponseRedirect(reverse_lazy('all_tickets'))
@@ -176,7 +177,6 @@ class SeanceListView(ListView):
     model = models.Seance
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        # context = super(SeanceListView, self).get_context_data(**kwargs)
         ordering = self.kwargs.get('ord' or None)
         choice = 'title'
         seance_list = models.Seance.objects.all().order_by('film__title')
@@ -232,12 +232,15 @@ class SeanceViewSet(ModelViewSet):
     queryset = models.Seance.objects.all()
     serializer_class = SeanceSerializer
     permission_classes = [IsAdminUser]
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('hall', 'beginning')
+
 
 
 class TicketViewSet(ModelViewSet):
     queryset = models.Ticket.objects.all()
     serializer_class = TicketSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [AuthorOnlyPermission]
 
 
 """------------------------------------------------------------------------------------------------------------------"""
@@ -249,7 +252,8 @@ class TicketsAPIView(APIView):
     def get(self, request, *args, **kwargs):
         if kwargs.get('pk'):
             ticket = models.Ticket.objects.get(id=kwargs.get('pk'))
-            data = TicketSerializer(ticket).data
+            if request.user == ticket.user or request.user.is_superuser:
+                data = TicketSerializer(ticket).data
         else:
             tickets = models.Ticket.objects.filter(user=request.user)
             data = TicketSerializer(tickets, many=True).data
@@ -257,7 +261,6 @@ class TicketsAPIView(APIView):
 
     def perform_create(self, serializer):
         user = self.request.user
-        user.save()
         return serializer.save(user=user)
 
     def post(self, request, *args, **kwargs):
@@ -298,3 +301,5 @@ def hall_list(request, *args, **kwargs):
             halls = models.Hall.objects.all()
             data = HallSerializer(halls, many=True).data
         return Response(data, status=200)
+
+
