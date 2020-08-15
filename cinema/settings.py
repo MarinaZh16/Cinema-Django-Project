@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'cinema.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'CINEMA'),
+        'NAME': os.path.join(BASE_DIR, 'CINEMA_1'),
         'USER': 'Adminnn',
         'PASSWORD': 'Kakakaushka16',
         'HOST': 'localhost',

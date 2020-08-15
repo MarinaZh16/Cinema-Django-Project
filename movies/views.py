@@ -123,7 +123,6 @@ class SeanceCreate(ProtectedTemplateView, CreateView):
 
 
 class SeanceUpdate(ProtectedTemplateView, UpdateView):
-    # model = models.Seance
     queryset = models.Seance.objects.filter(is_editable=True)
     form_class = forms.SeanceForm
     success_url = reverse_lazy('all_seances')
@@ -167,7 +166,7 @@ class SeanceDetailView(DetailView):
                         ticket.save()
                         seance.seats -= 1
                         seance.save()
-                        return HttpResponseRedirect(reverse_lazy('all_tickets'))
+            return HttpResponseRedirect(reverse_lazy('all_tickets'))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 

@@ -69,7 +69,7 @@ class Seance(TimestampModel):
     film = models.ForeignKey(Film, null=True, on_delete=models.CASCADE)
     hall = models.ForeignKey(Hall, null=True, on_delete=models.CASCADE)
     beginning = models.DateTimeField(default=timezone.now)
-    end = models.DateTimeField(default=timezone.now)
+    end = models.DateTimeField(default=0)
     price = models.FloatField(default=0)
     seats = models.IntegerField(default=0)
     is_editable = models.BooleanField(default=True)

@@ -40,8 +40,8 @@ class SeanceForm(ModelForm):
             if seance_list:
                 end = beginning + film.duration
                 for seance in seance_list:
-                    if (seance.beginning.time() <= beginning.time() <= seance.end.time()) or \
-                            (seance.beginning.time() <= end.time() <= seance.end.time()):
+                    if (seance.beginning <= beginning <= seance.end) or \
+                            (seance.beginning <= end <= seance.end):
                         raise forms.ValidationError(
                             'That time already taken. You can pick another time or another hall')
             return beginning

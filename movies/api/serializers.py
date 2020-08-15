@@ -34,7 +34,7 @@ class SeanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Seance
-        fields = ('url', 'film', 'hall', 'price', 'beginning', 'is_editable')
+        fields = ['url', 'film', 'hall', 'price', 'beginning', 'is_editable']
         read_only_fields = ['is_editable']
 
 
@@ -45,7 +45,7 @@ class SeanceSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('This movie has expired!')
         elif film.start_show > beginning.date() or beginning.date() > film.end_show:
             raise serializers.ValidationError('That date is out of range. Pick date between %s - %s' %
-                                                (film.start_show, film.end_show))
+                                              (film.start_show, film.end_show))
         elif beginning < timezone.now():
             raise serializers.ValidationError('This time has passed')
         else:
@@ -54,8 +54,8 @@ class SeanceSerializer(serializers.ModelSerializer):
             if seance_list:
                 end = beginning + film.duration
                 for seance in seance_list:
-                    if (seance.beginning.time() <= beginning.time() <= seance.end.time()) or \
-                            (seance.beginning.time() <= end.time() <= seance.end.time()):
+                    if (seance.beginning <= beginning <= seance.end) or \
+                            (seance.beginning <= end <= seance.end):
                         raise serializers.ValidationError(
                             'That time already taken. You can pick another time or another hall')
             return data

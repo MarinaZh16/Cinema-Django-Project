@@ -31,9 +31,9 @@ router.register(r'user', UserViewSet)
 
 
 urlpatterns = [
+    path('api/', include(router.urls)),
     path('', views.index, name='homepage'),
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
     path('obtain_token/', ObtainTokenView.as_view()),
     path('movies/', include('movies.urls')),
     path('user/', include('user.urls')),
