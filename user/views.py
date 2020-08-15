@@ -1,19 +1,18 @@
 from django.contrib.auth import login, authenticate, logout as logout_
 from django.shortcuts import redirect, render
-from user.forms import UserForm
-from user.models import User
 from django.views.generic.edit import FormView, UpdateView
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy, reverse
-from movies.api.serializers import UserSerializer
-from rest_framework.viewsets import ModelViewSet
 from django.http import HttpResponseRedirect, HttpResponse
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser
-
+from movies.api.serializers import UserSerializer
+from user.forms import UserForm
+from user.models import User
 
 class RegisterView(FormView):
     model = User

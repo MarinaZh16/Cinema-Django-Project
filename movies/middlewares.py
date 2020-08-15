@@ -1,4 +1,3 @@
-# from django.contrib import messages
 from datetime import date, timedelta
 from django.http import HttpResponseRedirect
 from django.urls import reverse

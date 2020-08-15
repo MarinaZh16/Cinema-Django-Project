@@ -1,4 +1,3 @@
-# from django.contrib import messages
 from datetime import datetime
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect

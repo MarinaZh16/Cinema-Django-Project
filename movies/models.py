@@ -1,7 +1,8 @@
-from django.db import models
-from django.conf import settings
-from django.utils import timezone
 from datetime import timedelta
+from django.utils import timezone
+from django.conf import settings
+from django.db import models
+
 
 USER_MODEL = settings.AUTH_USER_MODEL
 
@@ -65,8 +66,8 @@ class Hall(TimestampModel):
 
 
 class Seance(TimestampModel):
-    film = models.ForeignKey(Film, null=True, on_delete=models.SET_NULL)
-    hall = models.ForeignKey(Hall, null=True, on_delete=models.SET_NULL)
+    film = models.ForeignKey(Film, null=True, on_delete=models.CASCADE)
+    hall = models.ForeignKey(Hall, null=True, on_delete=models.CASCADE)
     beginning = models.DateTimeField(default=timezone.now)
     end = models.DateTimeField(default=timezone.now)
     price = models.FloatField(default=0)
@@ -102,7 +103,7 @@ class Seance(TimestampModel):
 
 
 class Ticket(TimestampModel):
-    user = models.ForeignKey(USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
+    user = models.ForeignKey(USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
     seance = models.ForeignKey(Seance, null=True, on_delete=models.CASCADE)
     row = models.IntegerField(default=0)
     seat = models.IntegerField(default=0)

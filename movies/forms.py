@@ -1,16 +1,13 @@
-from django.forms import ModelForm
-from movies import models
-from django import forms
-from tempus_dominus.widgets import DatePicker, DateTimePicker
 import datetime
+from django import forms
+from django.forms import ModelForm
 from django.utils import timezone
-
-from django.contrib import messages
+from tempus_dominus.widgets import DatePicker, DateTimePicker
+from movies import models
 
 
 class FilmForm(ModelForm):
     start_show = forms.DateTimeField(widget=DatePicker)
-    # end_show = forms.DateTimeField(widget=DatePicker)
     film_duration = forms.CharField(help_text='minutes')
 
     class Meta:

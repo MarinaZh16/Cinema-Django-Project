@@ -1,22 +1,20 @@
+from datetime import timedelta, date, datetime
 from django.shortcuts import render, redirect
-from movies import models, forms
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, TemplateView
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.utils import timezone
-from datetime import timedelta, date, datetime
 from django.contrib import messages
-from movies.api.serializers import FilmSerializer, SeanceSerializer, TicketSerializer, HallSerializer
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, TemplateView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, action
-from django.contrib.auth.mixins import UserPassesTestMixin
-from rest_framework import status
-from movies.api.permissions import AuthorOnlyPermission
 from django_filters.rest_framework import DjangoFilterBackend
-
+from movies.api.permissions import AuthorOnlyPermission
+from movies.api.serializers import FilmSerializer, SeanceSerializer, TicketSerializer, HallSerializer
+from movies import models, forms
 
 class ProtectedTemplateView(UserPassesTestMixin):
     def test_func(self):
