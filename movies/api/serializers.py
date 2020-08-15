@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ['username', 'email']
 
 
-class HallSerializer(serializers.HyperlinkedModelSerializer):
+class HallSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Hall
@@ -34,9 +34,8 @@ class SeanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Seance
-        fields = ['url', 'film', 'hall', 'price', 'beginning', 'is_editable']
+        fields = ['film', 'hall', 'price', 'beginning', 'is_editable']
         read_only_fields = ['is_editable']
-
 
     def validate(self, data):
         beginning = data['beginning']
