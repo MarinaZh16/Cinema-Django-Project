@@ -169,7 +169,7 @@ class SeanceDetailView(DetailView):
                         ticket.save()
                         seance.seats -= 1
                         seance.save()
-        # return HttpResponseRedirect(reverse_lazy('all_tickets'))
+                        return HttpResponseRedirect(reverse_lazy('all_tickets'))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -200,7 +200,7 @@ class TicketListView(ListView):
         user = self.request.user
         seances = []
         for ticket in tickets:
-            if ticket.user == user:
+            if ticket.user == user or user.is_superuser:
                 seances.append(models.Seance.objects.get(id=ticket.seance.id))
         seance_list = set(seances)
         context = super().get_context_data()

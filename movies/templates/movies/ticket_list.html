@@ -6,7 +6,9 @@
 {% block content %}
 
 <div class="container">
+    {% if not user.is_superuser %}
     <h5>Total count {{ user.total_sum }} UAH</h5>
+    {% endif %}
 {% for seance in seance_list %}
 <div class="col" id="col3">
     <div class="row">

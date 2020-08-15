@@ -4,6 +4,7 @@ from datetime import datetime
 import uuid as uuid
 from movies.models import Ticket
 
+
 class User(AbstractUser):
     last_echo = models.DateTimeField(auto_now=True)
 
