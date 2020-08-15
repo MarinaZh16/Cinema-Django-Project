@@ -233,7 +233,6 @@ class SeanceViewSet(ModelViewSet):
     filter_fields = ('hall', 'beginning')
 
 
-
 class TicketViewSet(ModelViewSet):
     queryset = models.Ticket.objects.all()
     serializer_class = TicketSerializer
