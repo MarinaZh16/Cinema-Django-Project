@@ -118,12 +118,13 @@ class SeanceCreate(ProtectedTemplateView, CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
+        self.object.seats = self.object.hall.total_seats
         self.object.save()
         return super().form_valid(form)
 
 
 class SeanceUpdate(ProtectedTemplateView, UpdateView):
-    queryset = models.Seance.objects.filter(is_editable=True)
+    model = models.Seance
     form_class = forms.SeanceForm
     success_url = reverse_lazy('all_seances')
 

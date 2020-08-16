@@ -88,10 +88,9 @@ class Seance(TimestampModel):
 
     def save(self, *args, **kwargs):
         self.end = self.beginning + self.film.duration
-        if self.seats == 0 and self.created_at == None:
-            self.seats = self.hall.total_seats
+        # if self.seats == 0 and self.created_at == None:
+        #     self.seats = self.hall.total_seats
         # elif self.is_editable == True:
-
         super(Seance, self).save(*args, **kwargs)
 
     def delete(self, using=None):
