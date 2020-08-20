@@ -8,7 +8,7 @@
      <h1 class="title">{{ ticket.seance.film }}</h1>
      <div>{{ ticket.seance.film.description }}</div>
      <div>{{ ticket.seance.price }}</div>
-     <span class="title">Row: {{ ticket.seat }} / Seat: {{ ticket.row }}</span>
+     <span class="title">Row: {{ ticket.row }} / Seat: {{ ticket.seat }}</span>
       <p>{% if ticket.seance.film.image %}
           <img src="{{ticket.seance.film.image.url}}"  alt="" width="100%">
         {% else %}
