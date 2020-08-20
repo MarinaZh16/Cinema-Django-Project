@@ -1,11 +1,11 @@
 from django import forms
-from . import models
 from django.forms import ModelForm
-
+from django.contrib.auth.password_validation import validate_password
+from . import models
 
 
 class UserForm(ModelForm):
-    password = forms.CharField(required=True, widget=forms.PasswordInput)
+    password = forms.CharField(required=True, widget=forms.PasswordInput, validators=[validate_password])
     password2 = forms.CharField(required=True, widget=forms.PasswordInput)
 
     class Meta:
