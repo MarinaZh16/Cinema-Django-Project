@@ -25,11 +25,13 @@ class Film(models.Model):
 
     @property
     def duration(self):
+        """converting time into minutes"""
         duration = self.film_duration * 60
         return duration
 
     @property
     def end_show(self):
+        """calculating the end date of the film show (2 weeks)"""
         end_show = self.start_show + timedelta(days=14)
         return end_show
 
@@ -51,6 +53,7 @@ class Hall(TimestampModel):
 
     @property
     def total_seats(self):
+        """calculating the number of seats in the hall"""
         total = self.row * self.seat
         return total
 
@@ -76,17 +79,23 @@ class Seance(TimestampModel):
 
     @property
     def seat_list(self):
+        """generating a list of seats to draw in the template"""
         return [i for i in range(1, self.hall.seat+1)]
 
     @property
     def row_list(self):
+        """generating a list of rows to draw in the template"""
         return [i for i in range(1, self.hall.row+1)]
 
     class Meta:
         db_table = "Seance"
+        """seances in one hall should not be interrupted in time"""
         unique_together = ("id", "beginning", "hall")
 
     def save(self, *args, **kwargs):
+        """
+        calculating the end time of the seance depending on the start time and duration of the film
+        """
         self.end = self.beginning + self.film.duration
         # if self.seats == 0 and self.created_at == None:
         #     self.seats = self.hall.total_seats
@@ -108,6 +117,7 @@ class Ticket(TimestampModel):
     seat = models.IntegerField(default=0)
 
     class Meta:
+        """seats must be unique for one seance"""
         unique_together = ("seat", "row", "seance")
 
     def save(self, *args, **kwargs):

@@ -16,7 +16,10 @@ from movies.api.permissions import AuthorOnlyPermission
 from movies.api.serializers import FilmSerializer, SeanceSerializer, TicketSerializer, HallSerializer
 from movies import models, forms
 
+
 class ProtectedTemplateView(UserPassesTestMixin):
+    """checking if user is superuser, and if not, redirect to the home page.
+    prevents regular users from using functions that they are not supposed to use"""
     def test_func(self):
         return self.request.user.is_superuser
 
@@ -55,12 +58,14 @@ class FilmListView(ListView):
 
 
 class SeancesTodayListView(ListView):
+    """list of seances for today and tomorrow"""
     model = models.Film
     ordering = '-title'
     template_name = 'movies/seances_list.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         film = []
+        """we get data from the user from the template (show the list of sessions for today or tomorrow)"""
         delta = self.kwargs.get('delta' or None)
         choice = 'today'
         if delta:
@@ -80,6 +85,7 @@ class SeancesTodayListView(ListView):
             view_date = date.today()
         today = datetime.now()
         context = super().get_context_data()
+        """we make a set so that the films do not repeat"""
         film_list = set(film)
         context.update(dict(film_list=film_list, seances=seances, view_date=view_date,
                             today=today, delta=delta, choice=choice))
@@ -104,6 +110,7 @@ class HallDetailView(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         hall = self.model.objects.get(id=self.kwargs['pk'])
+        """generate lists of seats and rows for drawing in the template"""
         seats = [i for i in range(1, hall.seat + 1)]
         rows = [i for i in range(1, hall.row + 1)]
         context = super().get_context_data()
@@ -140,6 +147,7 @@ class SeanceDetailView(DetailView):
     template_name = 'movies/seance_by_id.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
+        """we get data about tickets purchased for this seance in order to draw the occupied seats"""
         seance = self.model.objects.get(id=self.kwargs['pk'])
         tickets = models.Ticket.objects.filter(seance=seance)
         context = super().get_context_data()
@@ -148,19 +156,22 @@ class SeanceDetailView(DetailView):
 
     def post(self, request, *args, **kwargs):
         user = self.request.user
-
         seance_id = request.POST.get('seance_id')
         seance = models.Seance.objects.get(id=seance_id)
         if seance.beginning < timezone.now():
-            messages.error(request, 'Time is up! You can not byu ticket on this seance!')
+            """check if the seance has started"""
+            messages.error(request, 'Time is up! You can not buy ticket on this seance!')
         else:
             for key, value in request.POST.items():
                 if key.startswith('seat'):
                     row, seat = key.split('-')[-2:]
+                    """check the seats marked by the user"""
                     ticket_check = models.Ticket.objects.filter(seance=seance, row=row, seat=seat)
                     if seance.seats == 0:
+                        """check if there are free seats"""
                         messages.error(request, 'Sorry, all seats already taken! Pick another seance!')
                     elif ticket_check:
+                        """check if the selected seats are free"""
                         messages.error(request, 'seat %s in row %s is already taken! Pick another one!' % (seat, row))
                     else:
                         ticket = models.Ticket(user=user, seance=seance, row=row, seat=seat)
@@ -172,6 +183,7 @@ class SeanceDetailView(DetailView):
 
 
 class SeanceListView(ListView):
+    """list of all seances"""
     model = models.Seance
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -194,6 +206,7 @@ class TicketListView(ListView):
     ordering = ['seance__film__title']
 
     def get_context_data(self, *, request=None,  object_list=None, **kwargs):
+        """the list of tickets purchased by the user, displayed by seance (several tickets per seance)"""
         tickets = models.Ticket.objects.all()
         user = self.request.user
         seances = []

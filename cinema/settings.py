@@ -86,7 +86,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'CINEMA_1'),
-        'USER': 'Adminnn',
+        'USER': 'Admin',
         'PASSWORD': 'Kakakaushka16',
         'HOST': 'localhost',
         'PORT': '5432',

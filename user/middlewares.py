@@ -5,6 +5,7 @@ from django.urls import reverse
 
 
 class LogoutNotActive:
+    """logs out a user (not an admin) if no requests have been received for more than 5 minutes"""
     def __init__(self, get_response):
         self.get_response = get_response
 
